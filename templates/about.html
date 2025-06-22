@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>About | Chemical Reaction Prediction</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        video {
+            position: fixed;
+            top: 0;
+            left: 0;
+            min-width: 100%;
+            min-height: 100%;
+            z-index: -1;
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            z-index: -1;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 100px auto;
+            padding: 20px 30px;
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+            position: relative;
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        p {
+            color: #444;
+            line-height: 1.7;
+            margin-bottom: 16px;
+            text-align: justify;
+        }
+
+        .highlight {
+            font-weight: bold;
+            color: #0066cc;
+        }
+
+        /* Back button styling */
+        .back-button {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            text-decoration: none;
+        }
+
+        .back-button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+
+<body>
+    <video autoplay muted loop>
+        <source src="/static/crop.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+
+    <div class="overlay"></div>
+
+    <div class="container">
+        <a href="/" class="back-button">Back</a>
+
+        <h1>About Chemical Reaction Prediction Project</h1>
+
+        <p>
+            The <span class="highlight">Chemical Reaction Success Prediction</span> project is a simple web-based tool that predicts the <strong>success probability</strong> of a chemical reaction based on key experimental parameters:
+        </p>
+
+        <p>
+            ✅ <strong>Temperature</strong>  
+            ✅ <strong>pH</strong>  
+            ✅ <strong>Concentration of reactants</strong>
+        </p>
+
+        <p>
+            <strong>How It Works:</strong>  
+            The system uses a trained <span class="highlight">Artificial Neural Network (ANN)</span> model, built using TensorFlow/Keras, and trained on a dataset of previous chemical reactions (<code>reactions.csv</code>). Based on user input, it predicts the likelihood of success.
+        </p>
+
+        <p>
+            <strong>Key Features:</strong><br>
+            💻 User-friendly web interface to enter parameters.<br>
+            📈 Real-time prediction using a <span class="highlight">Flask</span> backend.<br>
+            🔐 Simple login and registration (local storage).<br>
+            🎨 Responsive design and modern styling.<br>
+            📊 Loads the trained ANN model and performs predictions.<br>
+            ✅ No external database — simple CSV & local storage for demo purposes.
+        </p>
+
+        <p>
+            <strong>Why this project?</strong><br>
+            Chemical reactions are highly sensitive to experimental conditions. This tool helps <span class="highlight">chemists, students, and researchers</span> quickly test if a reaction is likely to succeed, by adjusting the parameters — helping to save time, effort, and resources.  
+            It also demonstrates:
+            <ul>
+                <li>Machine learning applied to chemistry</li>
+                <li>A simple full-stack web application</li>
+                <li>AI-assisted decision-making in scientific experiments</li>
+            </ul>
+        </p>
+
+        <p>
+            <strong>Technologies Used:</strong><br>
+            Frontend: HTML, CSS, JavaScript<br>
+            Backend: Python, Flask<br>
+            ML Framework: TensorFlow, Keras<br>
+            Dataset: <code>reactions.csv</code><br>
+            Deployment: Flask (localhost)
+        </p>
+
+        <p>
+            <strong>Limitations:</strong><br>
+            This is a <em>prototype</em> trained on sample data.<br>
+            Accuracy depends on the quality of the dataset.<br>
+            Login/registration is a simple demo (local storage, not real auth).
+        </p>
+
+        <p>
+            This is part of our academic project by <span class="highlight">Team 2</span>.
+        </p>
+    </div>
+
+</body>
+</html>

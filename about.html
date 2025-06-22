@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Crop Prediction</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        video {
+            position: fixed;
+            top: 0;
+            left: 0;
+            min-width: 100%;
+            min-height: 100%;
+            z-index: -1;
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            z-index: -1;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 100px auto;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+            /* Make container position relative for absolute positioning of the back button */
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+
+        p {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .highlight {
+            font-weight: bold;
+            color: #0066cc;
+        }
+
+        /* Styling for back button */
+        .back-button {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            text-decoration: none;
+        }
+
+        .back-button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+
+<body>
+    <video autoplay muted loop>
+        <source src="/static/crop.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+    <div class="overlay"></div>
+    <div class="container">
+        <a href="/templates/index.html" class="back-button">Back</a> <!-- Added back button -->
+        <h1>About Crop Prediction</h1>
+        <p>Welcome to our crop prediction application. We utilize advanced algorithms to predict suitable crops for
+            cultivation based on various environmental factors and soil conditions.</p>
+        <P>The theme of our project is to be that collect the parameters like <span class="highlight">Phosphorus</span>,
+            <span class="highlight">Potassium</span>, <span class="highlight">Nitrogen</span>, <span
+                class="highlight">Rainfall</span>, <span class="highlight">Humidity</span>, <span
+                class="highlight">Temperature</span>, and <span class="highlight">pH</span> and by this parameters we
+            predict the best crop thats which is suitable for that that soil with the help of previous data set
+        </P>
+        <p<span class="highlight">Phosphorus :</span></p>
+            <p>Phosphorus is vital for crop growth,
+                In every stage, from seed to crop's show.
+                It fuels root development, robust and strong,
+                And helps plants to produce blooms before long.
+
+                It aids in photosynthesis, a plant's green delight,
+                And ensures fruits and grains ripen just right.
+                Without enough phosphorus, crops may struggle and lag,
+                But with ample supply, they thrive and brag.
+
+                So, farmers apply phosphorus fertilizers with care,
+                Ensuring crops flourish, producing yields rare.
+                For in the dance of growth, phosphorus plays a key role,
+                Nurturing crops from the seed to the final goal.</p>
+            <p<span class="highlight">Potassium :</span></p>
+                <p>Potassium is a vital nutrient for crop growth,
+                    It enhances vigor and resilience, a farmer's prime troth.
+                    From potatoes to tomatoes, its role is profound,
+                    In shaping yield and quality, it astound.
+
+                    Regulating water uptake, and photosynthesis too,
+                    Potassium ensures crops thrive, it's tried and true.
+                    Stronger stalks, resistant to diseases and stress,
+                    With potassium's support, crops progress.
+
+                    So, in fields and farms, its importance is clear,
+                    For healthy harvests, potassium must be near.
+                    A cornerstone of agriculture, this element stands tall,
+                    In nurturing crops, it's essential above all.</p>
+                <p<span class="highlight">Nitrogen :</span></p>
+                    <p>Nitrogen plays a pivotal role in crop cultivation, serving as an essential nutrient for plant
+                        growth and development. It is a fundamental component of chlorophyll, the molecule responsible
+                        for photosynthesis, which is crucial for converting sunlight into energy. Additionally, nitrogen
+                        is a key building block of amino acids, proteins, and nucleic acids, which are essential for
+                        plant structure and function.
+
+                        Farmers often supplement nitrogen in the form of fertilizers to enhance crop yields. However,
+                        excessive nitrogen application can lead to environmental concerns such as water pollution and
+                        greenhouse gas emissions. Thus, efficient nitrogen management practices, such as precision
+                        agriculture and crop rotation, are essential for sustainable farming and environmental
+                        stewardship.
+
+                        In summary, nitrogen is indispensable for crop productivity, but its judicious use is crucial
+                        for balancing agricultural needs with environmental sustainability.</p>
+
+                    <p<span class="highlight">Rainfall :</span></p>
+                        <p>Rainfall is a vital lifeline for crops, nurturing the earth and sustaining agricultural
+                            cycles. From gentle drizzles to torrential downpours, each drop contributes to the growth
+                            and vitality of crops. Adequate rainfall ensures optimal soil moisture, fostering
+                            germination and root development. However, excessive rainfall can lead to waterlogging,
+                            affecting plant health and yield. Conversely, insufficient rainfall results in drought
+                            stress, stunting crop growth and jeopardizing harvests. Thus, the delicate balance of
+                            rainfall plays a pivotal role in agricultural productivity, influencing food security and
+                            livelihoods worldwide.</p>
+                        <p<span class="highlight">Humidity :</span></p>
+                            <P>Humidity plays a crucial role in crop cultivation, influencing growth, development, and
+                                overall yield.
+
+                                Optimal humidity levels are essential for photosynthesis and transpiration, key
+                                processes in plant growth.
+
+                                High humidity can promote the spread of diseases and pests, leading to decreased crop
+                                quality and yield.
+
+                                Conversely, low humidity can cause excessive water loss through transpiration, stunting
+                                plant growth and reducing yield potential.
+
+                                Farmers often monitor and control humidity levels in greenhouses and agricultural
+                                environments to optimize conditions for crop growth and health.</P>
+                            <p<span class="highlight">Temperature :</span></p>
+                                <P>Temperature plays a crucial role in crop growth and development. Different crops have
+                                    specific temperature requirements for optimal growth, flowering, and fruiting.
+                                    Extremes in temperature, whether too hot or too cold, can adversely affect crop
+                                    yields.
+
+                                    Warm-season crops like maize, soybeans, and tomatoes thrive in temperatures ranging
+                                    from 70°F to 95°F (21°C to 35°C) during the growing season. Frost-sensitive crops
+                                    such as cucumbers and peppers are vulnerable to damage when temperatures drop below
+                                    50°F (10°C).
+
+                                    Conversely, cold-loving crops such as cabbage and carrots prefer cooler
+                                    temperatures, typically between 50°F to 70°F (10°C to 21°C). Exposure to excessive
+                                    heat can lead to wilting, reduced fruit set, and decreased yields in these crops.
+
+                                    Temperature fluctuations can disrupt plant metabolism, affecting photosynthesis,
+                                    respiration, and nutrient uptake. Farmers often monitor weather forecasts closely to
+                                    anticipate temperature changes and implement appropriate measures to protect their
+                                    crops, such as irrigation or shading techniques.
+
+                                    In summary, maintaining the right temperature is essential for ensuring healthy crop
+                                    growth and maximizing yields, making it a critical factor in agricultural management
+                                    and productivity.</P>
+                                <p<span class="highlight">ph :</span></p>
+                                    <P>Sure, here are a few lines about pH in crops:
+
+                                        pH plays a critical role in crop growth as it directly influences nutrient
+                                        availability in the soil. Most crops thrive in soil with a pH between 6.0 and
+                                        7.5, although optimal pH levels vary depending on the crop species.
+
+                                        An acidic or alkaline pH can lead to nutrient deficiencies or toxicities,
+                                        hindering plant growth and yield. Regular soil testing helps farmers monitor pH
+                                        levels and adjust them using appropriate amendments like lime to raise pH or
+                                        sulfur to lower pH.
+
+                                        Maintaining the right pH balance promotes healthy root development, enhances
+                                        nutrient uptake, and ultimately improves crop productivity. Thus, managing pH is
+                                        fundamental for successful crop management and achieving optimal yields.</P>
+                                    <p>This is our project</p>
+    </div>
+</body>
+
+</html>

@@ -6,83 +6,215 @@
     <title>Chemical Reaction Predictor</title>
     <style>
         :root {
-            --bg-dark: #0f172a;
-            --accent: #00897b;
-            --text: #1f2937;
-            --muted: #6b7280;
-            --radius: 12px;
+            --bg-1: #eef2f7;
+            --bg-2: #dbe6ea;
             --card: #ffffff;
+            --card-2: #f8fafc;
+            --text: #1f2937;
+            --muted: #64748b;
+            --accent: #00897b;
+            --accent-strong: #00695c;
+            --accent-soft: rgba(0, 137, 123, 0.12);
+            --border: #e2e8f0;
+            --input-bg: #ffffff;
+            --shadow: 0 12px 32px rgba(15, 23, 42, 0.12);
+            --shadow-sm: 0 4px 14px rgba(15, 23, 42, 0.08);
+            --radius: 16px;
+            --header-bg: rgba(255, 255, 255, 0.72);
+            --header-text: #0f172a;
+            --header-sub: #475569;
+            --eq-text: #0f172a;
+            --th-bg: #f1f5f9;
+            --th-text: #334155;
+            --row-border: #eef2f7;
+            --success-bg: #ecfdf5;
+            --success-border: #a7f3d0;
+            --success-text: #065f46;
+            --error-bg: #fef2f2;
+            --error-border: #fecaca;
+            --error-text: #b91c1c;
+            --badge-bg: #ccfbf1;
+            --badge-text: #115e59;
+            --remove-bg: #fee2e2;
+            --remove-text: #b91c1c;
+            --dashed-border: #cbd5e1;
+            --hover: #eef2f7;
+            --spin-track: #e2e8f0;
+        }
+
+        [data-theme="dark"] {
+            --bg-1: #0b1220;
+            --bg-2: #0f1f2b;
+            --card: #111a2b;
+            --card-2: #0f1827;
+            --text: #e2e8f0;
+            --muted: #94a3b8;
+            --accent: #2dd4bf;
+            --accent-strong: #14b8a6;
+            --accent-soft: rgba(45, 212, 191, 0.12);
+            --border: #1e293b;
+            --input-bg: #0f1827;
+            --shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
+            --shadow-sm: 0 4px 14px rgba(0, 0, 0, 0.3);
+            --header-bg: rgba(10, 16, 28, 0.72);
+            --header-text: #f1f5f9;
+            --header-sub: #94a3b8;
+            --eq-text: #f1f5f9;
+            --th-bg: #0f1827;
+            --th-text: #cbd5e1;
+            --row-border: #1e293b;
+            --success-bg: #04221a;
+            --success-border: #134e4a;
+            --success-text: #6ee7b7;
+            --error-bg: #2a1214;
+            --error-border: #7f1d1d;
+            --error-text: #fca5a5;
+            --badge-bg: #134e4a;
+            --badge-text: #5eead4;
+            --remove-bg: #3f1d1f;
+            --remove-text: #fca5a5;
+            --dashed-border: #334155;
+            --hover: #172136;
+            --spin-track: #1e293b;
         }
 
         * { box-sizing: border-box; }
 
         body {
             margin: 0;
+            min-height: 100vh;
             font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background: linear-gradient(160deg, #0f172a 0%, #134e4a 100%) fixed;
+            background: linear-gradient(160deg, var(--bg-1) 0%, var(--bg-2) 100%) fixed;
             color: var(--text);
             line-height: 1.6;
+            transition: background 0.3s ease, color 0.3s ease;
         }
 
         header {
-            background: rgba(255, 255, 255, 0.06);
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            background: var(--header-bg);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
+            padding: 0.9rem 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+        }
+
+        .brand { display: flex; align-items: center; gap: 0.7rem; }
+
+        .brand-logo {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            display: grid;
+            place-items: center;
+            background: linear-gradient(135deg, var(--accent), var(--accent-strong));
             color: #fff;
-            padding: 1.2rem 2rem;
-            text-align: center;
-            backdrop-filter: blur(6px);
+            flex-shrink: 0;
+            box-shadow: var(--shadow-sm);
         }
 
-        header h1 {
+        .brand h1 {
             margin: 0;
-            font-size: 1.9rem;
-            letter-spacing: 0.4px;
+            font-size: 1.35rem;
+            letter-spacing: 0.3px;
+            color: var(--header-text);
         }
 
-        header p {
-            margin: 0.3rem 0 0;
-            color: #cbd5e1;
-            font-size: 0.95rem;
+        .brand p {
+            margin: 0;
+            color: var(--header-sub);
+            font-size: 0.85rem;
         }
+
+        .theme-toggle {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            background: var(--card);
+            color: var(--text);
+            border: 1px solid var(--border);
+            border-radius: 999px;
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.3s ease;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .theme-toggle:hover {
+            transform: translateY(-1px);
+            box-shadow: var(--shadow);
+        }
+
+        .theme-toggle svg { width: 18px; height: 18px; }
 
         main {
-            max-width: 760px;
-            margin: 2.5rem auto;
-            padding: 0 1rem;
+            max-width: 1080px;
+            margin: 1.5rem auto;
+            padding: 0 1.25rem 3rem;
+            display: grid;
+            grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+            gap: 1.4rem;
+            align-items: start;
         }
 
         .card {
             background: var(--card);
+            border: 1px solid var(--border);
             border-radius: var(--radius);
-            padding: 2rem 1.8rem;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+            padding: 1.6rem 1.6rem 1.4rem;
+            box-shadow: var(--shadow);
+            transition: background 0.3s ease, border-color 0.3s ease;
         }
 
         .card h2 {
-            margin-top: 0;
-            font-size: 1.3rem;
+            margin: 0 0 1rem;
+            font-size: 1.15rem;
             color: var(--accent);
-            border-bottom: 2px solid #e5e7eb;
-            padding-bottom: 0.6rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .card h2::before {
+            content: "";
+            width: 10px;
+            height: 10px;
+            border-radius: 3px;
+            background: linear-gradient(135deg, var(--accent), var(--accent-strong));
+            display: inline-block;
         }
 
         label {
             display: block;
             font-weight: 600;
-            margin: 0.9rem 0 0.3rem;
-            font-size: 0.95rem;
+            margin: 1rem 0 0.35rem;
+            font-size: 0.9rem;
+            color: var(--text);
         }
 
         input[type="number"], input[type="text"] {
             width: 100%;
-            padding: 0.6rem 0.8rem;
+            padding: 0.65rem 0.85rem;
             font-size: 1rem;
-            border: 1px solid #cbd5e1;
-            border-radius: 8px;
+            color: var(--text);
+            background: var(--input-bg);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
         }
 
         input:focus {
-            outline: 2px solid var(--accent);
-            outline-offset: 1px;
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px var(--accent-soft);
         }
 
         .reactant-row {
@@ -95,120 +227,232 @@
         .reactant-row .name-input { flex: 2; }
         .reactant-row .mass-input { flex: 1; min-width: 90px; }
 
-        .reactant-row .remove-btn {
-            background: #fee2e2;
-            color: #b91c1c;
+        .remove-btn {
+            background: var(--remove-bg);
+            color: var(--remove-text);
             border: none;
-            border-radius: 8px;
-            padding: 0.55rem 0.75rem;
+            border-radius: 10px;
+            padding: 0.6rem 0.8rem;
             cursor: pointer;
             font-weight: 700;
+            line-height: 1;
+            transition: filter 0.2s ease, transform 0.2s ease;
         }
 
+        .remove-btn:hover { filter: brightness(1.05); transform: scale(1.05); }
+
         .add-btn {
-            background: #f3f4f6;
-            border: 1px dashed #9ca3af;
-            color: #374151;
-            border-radius: 8px;
-            padding: 0.5rem 1rem;
+            background: transparent;
+            border: 1px dashed var(--dashed-border);
+            color: var(--muted);
+            border-radius: 10px;
+            padding: 0.55rem 1rem;
             cursor: pointer;
             width: 100%;
             font-weight: 600;
+            transition: background 0.2s ease, color 0.2s ease;
         }
 
-        .add-btn:hover { background: #e5e7eb; }
+        .add-btn:hover { background: var(--hover); color: var(--text); }
 
-        .actions {
-            display: flex;
-            gap: 0.7rem;
-            margin-top: 1.3rem;
-        }
+        .actions { margin-top: 1.2rem; }
 
         button[type="submit"] {
-            background: var(--accent);
+            background: linear-gradient(135deg, var(--accent), var(--accent-strong));
             color: #fff;
             border: none;
-            padding: 0.8rem 2rem;
-            font-size: 1rem;
-            border-radius: 10px;
-            cursor: pointer;
-            flex: 1;
+            padding: 0.85rem 2rem;
+            font-size: 1.02rem;
             font-weight: 600;
-            transition: background 0.25s ease;
+            border-radius: 12px;
+            cursor: pointer;
+            width: 100%;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+            box-shadow: 0 6px 18px var(--accent-soft);
         }
 
-        button[type="submit"]:hover { background: #00695c; }
-        button[type="submit"]:disabled { background: #9ca3af; cursor: not-allowed; }
+        button[type="submit"]:hover { transform: translateY(-2px); box-shadow: 0 10px 24px var(--accent-soft); }
+        button[type="submit"]:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
 
-        #result {
-            margin-top: 1.6rem;
-            display: none;
+        .hint {
+            font-size: 0.82rem;
+            color: var(--muted);
+            margin-top: 1.1rem;
+            padding-top: 0.9rem;
+            border-top: 1px solid var(--border);
         }
 
-        #result.show { display: block; }
+        /* ---------- results column ---------- */
+        .results-col {
+            position: sticky;
+            top: 6.2rem;
+            min-height: 60vh;
+        }
+
+        .result-placeholder {
+            display: grid;
+            place-items: center;
+            text-align: center;
+            color: var(--muted);
+            padding: 3.5rem 1.5rem;
+            gap: 1rem;
+        }
+
+        .result-placeholder svg {
+            width: 64px;
+            height: 64px;
+            opacity: 0.5;
+        }
+
+        .result-placeholder .title { font-size: 1.05rem; font-weight: 600; color: var(--text); }
+        .result-placeholder .sub { font-size: 0.88rem; max-width: 300px; }
+
+        .spinner {
+            width: 34px;
+            height: 34px;
+            border: 3px solid var(--spin-track);
+            border-top-color: var(--accent);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto 0.8rem;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .success-box, .error-box { animation: fadeUp 0.35s ease; }
 
         .error-box {
-            background: #fef2f2;
-            border: 1px solid #fecaca;
-            color: #b91c1c;
-            padding: 1rem;
+            background: var(--error-bg);
+            border: 1px solid var(--error-border);
+            color: var(--error-text);
+            padding: 1.1rem 1.2rem;
             border-radius: var(--radius);
         }
 
         .success-box {
-            background: #f0fdf4;
-            border: 1px solid #bbf7d0;
-            padding: 1.2rem;
+            background: var(--success-bg);
+            border: 1px solid var(--success-border);
+            color: var(--text);
+            padding: 1.2rem 1.3rem;
             border-radius: var(--radius);
         }
 
-        .equation {
-            font-size: 1.25rem;
-            font-weight: 600;
-            margin: 0.4rem 0 0.8rem;
-            color: #0f172a;
+        .badge {
+            display: inline-block;
+            background: var(--badge-bg);
+            color: var(--badge-text);
+            border-radius: 999px;
+            padding: 0.22rem 0.8rem;
+            font-size: 0.78rem;
+            font-weight: 700;
+            text-transform: capitalize;
+            letter-spacing: 0.4px;
         }
 
-        .notes { color: var(--muted); font-size: 0.9rem; margin-bottom: 1rem; }
+        .result-title {
+            margin: 0.7rem 0 0.2rem;
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .equation {
+            font-size: 1.35rem;
+            font-weight: 600;
+            margin: 0.5rem 0 0.7rem;
+            color: var(--eq-text);
+            padding: 0.8rem;
+            background: var(--card-2);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .notes { color: var(--muted); font-size: 0.86rem; margin-bottom: 0.9rem; }
+
+        .limiting {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            margin-bottom: 0.7rem;
+            padding: 0.6rem 0.8rem;
+            background: var(--accent-soft);
+            border-radius: 10px;
+            color: var(--text);
+        }
+
+        .limiting strong { color: var(--accent); }
+
+        h4 { margin: 1rem 0 0.3rem; font-size: 0.9rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
 
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 0.8rem;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
         }
 
         th, td {
             text-align: left;
-            padding: 0.55rem 0.7rem;
-            border-bottom: 1px solid #e5e7eb;
+            padding: 0.5rem 0.6rem;
+            border-bottom: 1px solid var(--row-border);
         }
 
-        th { background: #f9fafb; color: #374151; }
-
-        .badge {
-            display: inline-block;
-            background: #dcfce7;
-            color: #166534;
-            border-radius: 999px;
-            padding: 0.25rem 0.75rem;
-            font-size: 0.85rem;
-            font-weight: 600;
-            margin-top: 0.6rem;
+        th {
+            background: var(--th-bg);
+            color: var(--th-text);
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
         }
 
-        .hint { font-size: 0.85rem; color: var(--muted); margin-top: 1rem; }
+        th:first-child, td:first-child { border-top-left-radius: 8px; }
+        th:last-child, td:last-child { border-top-right-radius: 8px; }
+
+        @media (max-width: 900px) {
+            main { grid-template-columns: 1fr; }
+            .results-col {
+                position: static;
+                min-height: 0;
+            }
+            header { flex-wrap: wrap; }
+        }
     </style>
 </head>
 <body>
 
 <header>
-    <h1>Chemical Reaction Predictor</h1>
-    <p>Enter reactants, masses, and temperature to predict the reaction and its products.</p>
+    <div class="brand">
+        <div class="brand-logo">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M10 2v6.5L4.5 17a2.5 2.5 0 0 0 2.16 3.72h10.68A2.5 2.5 0 0 0 19.5 17L14 8.5V2"/>
+                <path d="M8 13h8"/>
+            </svg>
+        </div>
+        <div>
+            <h1>Chemical Reaction Predictor</h1>
+            <p>Predict the reaction, products, and limiting reagent</p>
+        </div>
+    </div>
+    <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle theme">
+        <svg id="iconSun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>
+        </svg>
+        <svg id="iconMoon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        </svg>
+        <span id="themeLabel">Dark</span>
+    </button>
 </header>
 
 <main>
-    <div class="card">
+    <!-- LEFT: inputs -->
+    <section class="card">
         <h2>Reactants</h2>
         <form id="predictForm">
             <div id="reactants"></div>
@@ -226,19 +470,72 @@
             Example: 5 g of sodium + 100 g of water at 25 °C &rarr; sodium hydroxide + hydrogen gas.
             Try "calcium carbonate" at 900 °C for a decomposition, or "methane" + "oxygen" at 600 °C to burn it.
         </div>
+    </section>
 
+    <!-- RIGHT: results -->
+    <aside class="card results-col">
+        <h2>Result</h2>
         <div id="result"></div>
-    </div>
+    </aside>
 </main>
 
 <script>
 (function () {
-    let catalog = [];
     const reactantsBox = document.getElementById('reactants');
     const resultBox = document.getElementById('result');
     const form = document.getElementById('predictForm');
     const btn = document.getElementById('predictBtn');
+    const themeToggle = document.getElementById('themeToggle');
+    const iconSun = document.getElementById('iconSun');
+    const iconMoon = document.getElementById('iconMoon');
+    const themeLabel = document.getElementById('themeLabel');
 
+    /* ---------------- theme ---------------- */
+    function applyTheme(theme) {
+        document.documentElement.dataset.theme = theme;
+        iconMoon.style.display = theme === 'dark' ? 'block' : 'none';
+        iconSun.style.display = theme === 'dark' ? 'none' : 'block';
+        themeLabel.textContent = theme === 'dark' ? 'Light' : 'Dark';
+    }
+
+    function storedTheme() {
+        try { return localStorage.getItem('theme'); } catch (e) { return null; }
+    }
+
+    function systemTheme() {
+        return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    }
+
+    applyTheme(storedTheme() || systemTheme());
+
+    themeToggle.addEventListener('click', function () {
+        const next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+        applyTheme(next);
+        try { localStorage.setItem('theme', next); } catch (e) { /* ignore */ }
+    });
+
+    /* ---------------- result helpers ---------------- */
+    function showPlaceholder() {
+        resultBox.innerHTML = `
+            <div class="result-placeholder">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M10 2v6.5L4.5 17a2.5 2.5 0 0 0 2.16 3.72h10.68A2.5 2.5 0 0 0 19.5 17L14 8.5V2"/>
+                    <path d="M8 13h8"/>
+                </svg>
+                <div class="title">Your result will appear here</div>
+                <div class="sub">Enter reactants, their masses, and a temperature, then hit Predict.</div>
+            </div>`;
+    }
+
+    function showLoading() {
+        resultBox.innerHTML = `
+            <div class="result-placeholder">
+                <div class="spinner"></div>
+                <div class="title">Predicting reaction...</div>
+            </div>`;
+    }
+
+    /* ---------------- reactant rows ---------------- */
     function rowTemplate(name, mass) {
         return `
             <div class="reactant-row">
@@ -264,6 +561,10 @@
         addRow('', '');
     }
 
+    function showError(msg) {
+        resultBox.innerHTML = `<div class="error-box">${escapeHtml(msg)}</div>`;
+    }
+
     function collect() {
         const rows = [...reactantsBox.querySelectorAll('.reactant-row')];
         const reactants = [];
@@ -271,8 +572,8 @@
             const name = row.querySelector('.name-input').value.trim();
             const mass = row.querySelector('.mass-input').value.trim();
             if (!name && !mass) continue;
-            if (!name) { resultBox.className = 'error-box show'; resultBox.textContent = 'A row has a mass but no chemical name.'; return null; }
-            if (!mass) { resultBox.className = 'error-box show'; resultBox.textContent = `Enter a mass (g) for "${name}".`; return null; }
+            if (!name) { showError('A row has a mass but no chemical name.'); return null; }
+            if (!mass) { showError('Enter a mass (g) for "' + name + '".'); return null; }
             reactants.push({ name: name, mass_g: parseFloat(mass) });
         }
         return reactants;
@@ -286,8 +587,7 @@
 
     function renderResult(data) {
         if (!data.matched) {
-            resultBox.className = 'error-box show';
-            resultBox.textContent = data.error || 'No reaction found.';
+            showError(data.error || 'No reaction found.');
             return;
         }
         const prodRows = data.products.map(function (p) {
@@ -299,24 +599,25 @@
                 return `<tr><td>${escapeHtml(p.name)}</td><td>${p.formula}</td><td>${p.moles}</td><td>${p.grams}</td></tr>`;
             }).join('');
         }
-        resultBox.className = 'success-box show';
         resultBox.innerHTML = `
-            <div class="badge">${escapeHtml(data.reaction_type || 'reaction')}</div>
-            <h3 style="margin:0.6rem 0 0.2rem">${escapeHtml(data.reaction_name || 'Reaction')}</h3>
-            <div class="equation">${data.equation_display || escapeHtml(data.equation)}</div>
-            <div class="notes">${escapeHtml(data.notes || '')}</div>
-            ${data.limiting_reagent ? `<div><strong>Limiting reagent:</strong> ${escapeHtml(data.limiting_reagent)}</div>` : ''}
-            <table>
-                <thead><tr><th>Product</th><th>Formula</th><th>Moles</th><th>Mass (g)</th></tr></thead>
-                <tbody>${prodRows}</tbody>
-            </table>
-            ${leftRows ? `
-            <h4 style="margin-bottom:0">Left over</h4>
-            <table>
-                <thead><tr><th>Reactant</th><th>Formula</th><th>Moles</th><th>Mass (g)</th></tr></thead>
-                <tbody>${leftRows}</tbody>
-            </table>` : ''}
-            ${data.description ? `<div class="notes" style="margin-top:0.8rem">${escapeHtml(data.description)}</div>` : ''}`;
+            <div class="success-box">
+                <span class="badge">${escapeHtml(data.reaction_type || 'reaction')}</span>
+                <div class="result-title">${escapeHtml(data.reaction_name || 'Reaction')}</div>
+                <div class="equation">${data.equation_display || escapeHtml(data.equation)}</div>
+                ${data.notes ? `<div class="notes">${escapeHtml(data.notes)}</div>` : ''}
+                ${data.limiting_reagent ? `<div class="limiting"><strong>Limiting reagent:</strong> ${escapeHtml(data.limiting_reagent)}</div>` : ''}
+                <table>
+                    <thead><tr><th>Product</th><th>Formula</th><th>Moles</th><th>Mass (g)</th></tr></thead>
+                    <tbody>${prodRows}</tbody>
+                </table>
+                ${leftRows ? `
+                <h4>Left over</h4>
+                <table>
+                    <thead><tr><th>Reactant</th><th>Formula</th><th>Moles</th><th>Mass (g)</th></tr></thead>
+                    <tbody>${leftRows}</tbody>
+                </table>` : ''}
+                ${data.description ? `<div class="notes" style="margin-top:0.8rem">${escapeHtml(data.description)}</div>` : ''}
+            </div>`;
     }
 
     form.addEventListener('submit', function (e) {
@@ -325,14 +626,12 @@
         if (!reactants) return;
         const temperature = parseFloat(document.getElementById('temperature').value);
         if (isNaN(temperature)) {
-            resultBox.className = 'error-box show';
-            resultBox.textContent = 'Enter a temperature in °C.';
+            showError('Enter a temperature in °C.');
             return;
         }
         btn.disabled = true;
         btn.textContent = 'Predicting...';
-        resultBox.className = 'error-box show';
-        resultBox.textContent = 'Working...';
+        showLoading();
 
         fetch('/predict', {
             method: 'POST',
@@ -342,8 +641,7 @@
         .then(function (r) { return r.json(); })
         .then(renderResult)
         .catch(function (err) {
-            resultBox.className = 'error-box show';
-            resultBox.textContent = 'Network error: ' + err.message;
+            showError('Network error: ' + err.message);
         })
         .finally(function () {
             btn.disabled = false;
@@ -358,10 +656,9 @@
     fetch('/api/chemicals')
         .then(function (r) { return r.json(); })
         .then(function (data) {
-            catalog = data;
             const dl = document.createElement('datalist');
             dl.id = 'catalog-list';
-            catalog.forEach(function (c) {
+            data.forEach(function (c) {
                 const opt = document.createElement('option');
                 opt.value = c.name;
                 opt.label = c.formula;
@@ -372,6 +669,7 @@
         .catch(function () { /* catalog picker is optional */ });
 
     resetRows();
+    showPlaceholder();
 })();
 </script>
 

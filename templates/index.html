@@ -3,251 +3,376 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Chemical Reaction Prediction</title>
+    <title>Chemical Reaction Predictor</title>
     <style>
         :root {
-            --bg-light: #ffffff;
-            --bg-dark: #150808;
+            --bg-dark: #0f172a;
             --accent: #00897b;
-            --text: #333333;
-            --muted: #777777;
+            --text: #1f2937;
+            --muted: #6b7280;
             --radius: 12px;
+            --card: #ffffff;
         }
 
-        * {
-            box-sizing: border-box;
-        }
+        * { box-sizing: border-box; }
 
         body {
             margin: 0;
             font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background: url('https://res.cloudinary.com/da7mcx2iq/image/upload/v1750568502/bg_suw4mm.jpg') no-repeat center center fixed;
-            background-size: cover;
+            background: linear-gradient(160deg, #0f172a 0%, #134e4a 100%) fixed;
             color: var(--text);
             line-height: 1.6;
         }
 
-        /* -----------------------------
-           Header
-        -----------------------------*/
         header {
-            background: var(--bg-dark);
-            color: #ffffff;
-            padding: 1.1rem 2rem;
-        
+            background: rgba(255, 255, 255, 0.06);
+            color: #fff;
+            padding: 1.2rem 2rem;
+            text-align: center;
+            backdrop-filter: blur(6px);
         }
 
-       header h1 {
-    margin: 0;
-    font-size: 2rem;
-    letter-spacing: 0.5px;
-    padding: 20px 0; /* padding top and bottom, no left/right */
-    text-align: center; /* this centers the text */
-}
-
-
-        .top-left-buttons {
-            position: static;
-            position: absolute;
-            display: flex;
-            flex-direction: row;
-            top: 50px;
-            right: 20px;
-            z-index: 100;
-
+        header h1 {
+            margin: 0;
+            font-size: 1.9rem;
+            letter-spacing: 0.4px;
         }
 
-        .top-left-buttons a {
-            margin-right: 10px;
-            background-color: #c6d26a;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            padding: 10px;
-            text-decoration: none;
-            cursor: pointer;
+        header p {
+            margin: 0.3rem 0 0;
+            color: #cbd5e1;
+            font-size: 0.95rem;
         }
 
-        .top-left-buttons a:hover {
-            background-color: #9aa765;
+        main {
+            max-width: 760px;
+            margin: 2.5rem auto;
+            padding: 0 1rem;
         }
 
-        .head {
-            padding-right: 150vh;
-        }
-
-        /* -----------------------------
-           Layout Helpers
-        -----------------------------*/
-        .container {
-            max-width: 500px;
-            border-color: #00897b;
-            margin: 150px auto;
-            padding: 2rem 1rem;
-            background-color: #fff;
-            border-radius: calc(var(--radius)* 0.8);
-
-        }
-
-        .section {
-            margin-bottom: 3rem;
-        }
-
-        .section h2 {
-            font-size: 1.4rem;
-            margin-bottom: 1rem;
-            position: relative;
-        }
-
-        .section h2::after {
-            content: "";
-            display: block;
-            width: 60px;
-            height: 3px;
-            background: var(--accent);
+        .card {
+            background: var(--card);
             border-radius: var(--radius);
-            margin-top: 6px;
+            padding: 2rem 1.8rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
         }
 
-        .input {
-            width: 50%;
+        .card h2 {
+            margin-top: 0;
+            font-size: 1.3rem;
+            color: var(--accent);
+            border-bottom: 2px solid #e5e7eb;
+            padding-bottom: 0.6rem;
         }
 
-        /* -----------------------------
-           Form Styles
-        -----------------------------*/
-        form label {
+        label {
             display: block;
-            margin-bottom: 1rem;
-            font-weight: 500;
+            font-weight: 600;
+            margin: 0.9rem 0 0.3rem;
+            font-size: 0.95rem;
         }
 
-        input[type="number"] {
+        input[type="number"], input[type="text"] {
             width: 100%;
             padding: 0.6rem 0.8rem;
             font-size: 1rem;
-            border: 1px solid #ccc;
-            border-radius: var(--radius);
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+        }
+
+        input:focus {
+            outline: 2px solid var(--accent);
+            outline-offset: 1px;
+        }
+
+        .reactant-row {
+            display: flex;
+            gap: 0.6rem;
+            align-items: center;
+            margin-bottom: 0.6rem;
+        }
+
+        .reactant-row .name-input { flex: 2; }
+        .reactant-row .mass-input { flex: 1; min-width: 90px; }
+
+        .reactant-row .remove-btn {
+            background: #fee2e2;
+            color: #b91c1c;
+            border: none;
+            border-radius: 8px;
+            padding: 0.55rem 0.75rem;
+            cursor: pointer;
+            font-weight: 700;
+        }
+
+        .add-btn {
+            background: #f3f4f6;
+            border: 1px dashed #9ca3af;
+            color: #374151;
+            border-radius: 8px;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            width: 100%;
+            font-weight: 600;
+        }
+
+        .add-btn:hover { background: #e5e7eb; }
+
+        .actions {
+            display: flex;
+            gap: 0.7rem;
+            margin-top: 1.3rem;
         }
 
         button[type="submit"] {
-            margin-top: 0.8rem;
             background: var(--accent);
             color: #fff;
             border: none;
-            padding: 0.8rem 1.6rem;
+            padding: 0.8rem 2rem;
             font-size: 1rem;
-            border-radius: var(--radius);
+            border-radius: 10px;
             cursor: pointer;
+            flex: 1;
+            font-weight: 600;
             transition: background 0.25s ease;
         }
 
-        button[type="submit"]:hover {
-            background: #00695c;
-        }
+        button[type="submit"]:hover { background: #00695c; }
+        button[type="submit"]:disabled { background: #9ca3af; cursor: not-allowed; }
 
-        /* -----------------------------
-           Result Box
-        -----------------------------*/
-        #predictionResult {
-            margin-top: 1.5rem;
-            padding: 1rem 1.2rem;
-            border: 1px solid #e0e0e0;
-            border-radius: var(--radius);
-            font-size: 1.1rem;
-            background: #f9f9f9;
+        #result {
+            margin-top: 1.6rem;
             display: none;
         }
 
-        /* -----------------------------
-           Footer
-        -----------------------------*/
-        .footer {
-            text-align: center;
-            color: var(--muted);
-            font-size: 0.9rem;
-            padding:10px;
-            background-color: #1d0202;
+        #result.show { display: block; }
+
+        .error-box {
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            color: #b91c1c;
+            padding: 1rem;
+            border-radius: var(--radius);
         }
 
-        @media (max-width: 600px) {
-            header h1 {
-                font-size: 1.6rem;
-            }
+        .success-box {
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            padding: 1.2rem;
+            border-radius: var(--radius);
         }
 
-        @media (max-width: 400px) {
-            header h1 {
-                font-size: 1.4rem;
-            }
-            .container {
-                padding: 1rem;
-            }
-        }   
+        .equation {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin: 0.4rem 0 0.8rem;
+            color: #0f172a;
+        }
 
+        .notes { color: var(--muted); font-size: 0.9rem; margin-bottom: 1rem; }
 
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 0.8rem;
+            font-size: 0.95rem;
+        }
+
+        th, td {
+            text-align: left;
+            padding: 0.55rem 0.7rem;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        th { background: #f9fafb; color: #374151; }
+
+        .badge {
+            display: inline-block;
+            background: #dcfce7;
+            color: #166534;
+            border-radius: 999px;
+            padding: 0.25rem 0.75rem;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-top: 0.6rem;
+        }
+
+        .hint { font-size: 0.85rem; color: var(--muted); margin-top: 1rem; }
     </style>
-    </head>
+</head>
 <body>
 
 <header>
-    <h1>Chemical Reaction Prediction</h1>
-    <div class="top-left-buttons">
-        <a href="/about">About</a>
-        <a href="/contact">Contact</a>
-        <a href="/login">Logout</a>
-    </div>
+    <h1>Chemical Reaction Predictor</h1>
+    <p>Enter reactants, masses, and temperature to predict the reaction and its products.</p>
 </header>
 
-<main class="container">
-    <section class="section" id="predict-section">
-        <h2>Enter Reaction Parameters</h2>
-        <form id="predictionForm">
-            <label>
-                Temperature (°C):
-                <input type="number" step="any" name="temperature" min="0" max="200" required>
-            </label>
+<main>
+    <div class="card">
+        <h2>Reactants</h2>
+        <form id="predictForm">
+            <div id="reactants"></div>
+            <button type="button" class="add-btn" id="addReactant">+ Add reactant</button>
 
-            <label>
-                pH:
-                <input type="number" step="any" name="ph" min="0" max="14" required>
-            </label>
+            <label for="temperature">Temperature (°C)</label>
+            <input type="number" step="any" id="temperature" name="temperature" placeholder="e.g. 25" required>
 
-            <label>
-                Concentration (mol/L):
-                <input type="number" step="any" name="concentration" min="0" max="10" required>
-            </label>
-
-            <button type="submit">Predict</button>
+            <div class="actions">
+                <button type="submit" id="predictBtn">Predict</button>
+            </div>
         </form>
 
-        <div id="predictionResult"></div>
-    </section>
+        <div class="hint">
+            Example: 5 g of sodium + 100 g of water at 25 °C &rarr; sodium hydroxide + hydrogen gas.
+            Try "calcium carbonate" at 900 °C for a decomposition, or "methane" + "oxygen" at 600 °C to burn it.
+        </div>
+
+        <div id="result"></div>
+    </div>
 </main>
 
-<footer class="footer">
-    © 2025 Chemical Prediction — Powered by Team 2
-</footer>
-
 <script>
-document.getElementById('predictionForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-    const formData = new FormData(this);
+(function () {
+    let catalog = [];
+    const reactantsBox = document.getElementById('reactants');
+    const resultBox = document.getElementById('result');
+    const form = document.getElementById('predictForm');
+    const btn = document.getElementById('predictBtn');
 
-    fetch('/predict', {
-        method: 'POST',
-        body: formData
-    })
-    .then(response => response.json())
-    .then(data => {
-        const resultDiv = document.getElementById('predictionResult');
-        resultDiv.style.display = 'block';
-        resultDiv.textContent = data.result;
-    })
-    .catch(error => {
-        console.error('Error:', error);
+    function rowTemplate(name, mass) {
+        return `
+            <div class="reactant-row">
+                <input class="name-input" type="text" list="catalog-list" placeholder="Chemical name (e.g. sodium)" value="${name || ''}">
+                <input class="mass-input" type="number" step="any" min="0.001" placeholder="mass (g)" value="${mass != null ? mass : ''}">
+                <button type="button" class="remove-btn" title="Remove">&times;</button>
+            </div>`;
+    }
+
+    function addRow(name, mass) {
+        const div = document.createElement('div');
+        div.innerHTML = rowTemplate(name, mass);
+        const row = div.firstElementChild;
+        row.querySelector('.remove-btn').addEventListener('click', function () {
+            row.remove();
+        });
+        reactantsBox.appendChild(row);
+    }
+
+    function resetRows() {
+        reactantsBox.innerHTML = '';
+        addRow('', '');
+        addRow('', '');
+    }
+
+    function collect() {
+        const rows = [...reactantsBox.querySelectorAll('.reactant-row')];
+        const reactants = [];
+        for (const row of rows) {
+            const name = row.querySelector('.name-input').value.trim();
+            const mass = row.querySelector('.mass-input').value.trim();
+            if (!name && !mass) continue;
+            if (!name) { resultBox.className = 'error-box show'; resultBox.textContent = 'A row has a mass but no chemical name.'; return null; }
+            if (!mass) { resultBox.className = 'error-box show'; resultBox.textContent = `Enter a mass (g) for "${name}".`; return null; }
+            reactants.push({ name: name, mass_g: parseFloat(mass) });
+        }
+        return reactants;
+    }
+
+    function escapeHtml(s) {
+        const div = document.createElement('div');
+        div.textContent = s;
+        return div.innerHTML;
+    }
+
+    function renderResult(data) {
+        if (!data.matched) {
+            resultBox.className = 'error-box show';
+            resultBox.textContent = data.error || 'No reaction found.';
+            return;
+        }
+        const prodRows = data.products.map(function (p) {
+            return `<tr><td>${escapeHtml(p.name)}</td><td>${p.formula}</td><td>${p.moles}</td><td>${p.grams}</td></tr>`;
+        }).join('');
+        let leftRows = '';
+        if (data.leftover && data.leftover.length) {
+            leftRows = data.leftover.map(function (p) {
+                return `<tr><td>${escapeHtml(p.name)}</td><td>${p.formula}</td><td>${p.moles}</td><td>${p.grams}</td></tr>`;
+            }).join('');
+        }
+        resultBox.className = 'success-box show';
+        resultBox.innerHTML = `
+            <div class="badge">${escapeHtml(data.reaction_type || 'reaction')}</div>
+            <h3 style="margin:0.6rem 0 0.2rem">${escapeHtml(data.reaction_name || 'Reaction')}</h3>
+            <div class="equation">${data.equation_display || escapeHtml(data.equation)}</div>
+            <div class="notes">${escapeHtml(data.notes || '')}</div>
+            ${data.limiting_reagent ? `<div><strong>Limiting reagent:</strong> ${escapeHtml(data.limiting_reagent)}</div>` : ''}
+            <table>
+                <thead><tr><th>Product</th><th>Formula</th><th>Moles</th><th>Mass (g)</th></tr></thead>
+                <tbody>${prodRows}</tbody>
+            </table>
+            ${leftRows ? `
+            <h4 style="margin-bottom:0">Left over</h4>
+            <table>
+                <thead><tr><th>Reactant</th><th>Formula</th><th>Moles</th><th>Mass (g)</th></tr></thead>
+                <tbody>${leftRows}</tbody>
+            </table>` : ''}
+            ${data.description ? `<div class="notes" style="margin-top:0.8rem">${escapeHtml(data.description)}</div>` : ''}`;
+    }
+
+    form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        const reactants = collect();
+        if (!reactants) return;
+        const temperature = parseFloat(document.getElementById('temperature').value);
+        if (isNaN(temperature)) {
+            resultBox.className = 'error-box show';
+            resultBox.textContent = 'Enter a temperature in °C.';
+            return;
+        }
+        btn.disabled = true;
+        btn.textContent = 'Predicting...';
+        resultBox.className = 'error-box show';
+        resultBox.textContent = 'Working...';
+
+        fetch('/predict', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ reactants: reactants, temperature: temperature })
+        })
+        .then(function (r) { return r.json(); })
+        .then(renderResult)
+        .catch(function (err) {
+            resultBox.className = 'error-box show';
+            resultBox.textContent = 'Network error: ' + err.message;
+        })
+        .finally(function () {
+            btn.disabled = false;
+            btn.textContent = 'Predict';
+        });
     });
-});
+
+    document.getElementById('addReactant').addEventListener('click', function () {
+        addRow('', '');
+    });
+
+    fetch('/api/chemicals')
+        .then(function (r) { return r.json(); })
+        .then(function (data) {
+            catalog = data;
+            const dl = document.createElement('datalist');
+            dl.id = 'catalog-list';
+            catalog.forEach(function (c) {
+                const opt = document.createElement('option');
+                opt.value = c.name;
+                opt.label = c.formula;
+                dl.appendChild(opt);
+            });
+            document.body.appendChild(dl);
+        })
+        .catch(function () { /* catalog picker is optional */ });
+
+    resetRows();
+})();
 </script>
 
 </body>

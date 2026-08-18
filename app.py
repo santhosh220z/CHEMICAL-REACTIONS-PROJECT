@@ -1,192 +1,97 @@
-# # app.py
+"""Chemical Reaction Predictor - Flask web app.
 
-# from flask import Flask, request, render_template, jsonify
-# import numpy as np
-# import tensorflow as tf
-# from tensorflow.keras.models import load_model
-# import pickle
-# from sklearn.preprocessing import StandardScaler
-# import pandas as pd
+Predicts which chemical reaction occurs given reactant names, their masses (g),
+and temperature (C), then computes limiting reagent and product amounts.
+"""
 
-# app = Flask(__name__)
+from flask import Flask, render_template, jsonify, request
 
-# # Load model
-# MODEL_PATH = 'ann_model_reactions.keras'
-# model = load_model(MODEL_PATH)
-# print(f"Loaded model: {MODEL_PATH}")
-
-# # Load and fit scaler on training data (ideally load saved scaler.pkl)
-# df = pd.read_csv('reactions.csv')
-# features = ['temperature', 'pH', 'concentration']
-# X = df[features].values
-# scaler = StandardScaler()
-# scaler.fit(X)
-
-# # Home page — serve HTML
-# @app.route('/')
-# def home():
-#     return render_template('index.html')
-
-# # API route for prediction
-# @app.route('/predict', methods=['POST'])
-# def predict():
-#     try:
-#         # Get form data
-#         temp = float(request.form['temperature'])
-#         ph = float(request.form['ph'])
-#         conc = float(request.form['concentration'])
-
-#         # Scale input
-#         input_scaled = scaler.transform([[temp, ph, conc]])
-
-#         # Predict
-#         prediction = model.predict(input_scaled)[0][0]
-#         success = 1 if prediction > 0.5 else 0
-
-#         result_text = f"Success Probability: {prediction:.4f} → Prediction: {'Success' if success==1 else 'Failure'}"
-
-#         return jsonify({'result': result_text})
-
-#     except Exception as e:
-#         print("Error:", e)
-#         return jsonify({'result': 'Error in prediction. Please check input values.'})
-
-# if __name__ == '__main__':
-#     app.run(debug=True)
-
-
-
-
-# from flask import Flask, request, render_template, jsonify
-# import numpy as np
-# import tensorflow as tf
-# from tensorflow.keras.models import load_model
-# import pandas as pd
-# from sklearn.preprocessing import StandardScaler
-
-# app = Flask(__name__)
-
-# # Load model
-# MODEL_PATH = 'ann_model_reactions.keras'
-# model = load_model(MODEL_PATH)
-# print(f"Loaded model: {MODEL_PATH}")
-
-# # Load and fit scaler
-# df = pd.read_csv('reactions.csv')
-# features = ['temperature', 'pH', 'concentration']
-# X = df[features].values
-# scaler = StandardScaler()
-# scaler.fit(X)
-
-# # Routes
-# @app.route('/')
-# def index():
-#     return render_template('index.html')
-
-# @app.route('/login')
-# def login():
-#     return render_template('login.html')
-
-# @app.route('/about')
-# def about():
-#     return render_template('about.html')
-
-# @app.route('/contact')
-# def contact():
-#     return render_template('contact.html')
-
-
-# # Predict API
-# @app.route('/predict', methods=['POST'])
-# def predict():
-#     try:
-#         temp = float(request.form['temperature'])
-#         ph = float(request.form['ph'])
-#         conc = float(request.form['concentration'])
-
-#         # Scale input
-#         input_scaled = scaler.transform([[temp, ph, conc]])
-
-#         # Predict
-#         prediction = model.predict(input_scaled)[0][0]
-#         success = 1 if prediction > 0.5 else 0
-
-#         result_text = f"Success Probability: {prediction:.4f} → Prediction: {'Success' if success==1 else 'Failure'}"
-
-#         return jsonify({'result': result_text})
-
-#     except Exception as e:
-#         print("Error:", e)
-#         return jsonify({'result': 'Error in prediction. Please check input values.'})
-
-# # Run the app
-# if __name__ == '__main__':
-#     app.run(debug=True)
-
-
-
-from flask import Flask, request, render_template, jsonify
-import numpy as np
-import tensorflow as tf
-from tensorflow.keras.models import load_model
-import pandas as pd
-from sklearn.preprocessing import StandardScaler
+from core.engine import predict, EngineError, NoReactionError
+from core.catalog import all_entries
+from core.templates import reaction_types
 
 app = Flask(__name__)
 
-# Load model
-MODEL_PATH = 'ann_model_reactions.keras'
-model = load_model(MODEL_PATH)
-print(f"Loaded model: {MODEL_PATH}")
 
-# Load and fit scaler
-df = pd.read_csv('reactions.csv')
-features = ['temperature', 'pH', 'concentration']
-X = df[features].values
-scaler = StandardScaler()
-scaler.fit(X)
+def _serialize(result):
+    """Convert engine result to a JSON-safe dict."""
+    return {
+        'matched': result['matched'],
+        'reaction_name': result['reaction_name'],
+        'reaction_type': result['reaction_type'],
+        'equation': result['equation'],
+        'equation_display': result['equation_display'],
+        'notes': result['notes'],
+        'limiting_reagent': result['limiting_reagent_name'],
+        'products': result['products'],
+        'leftover': result['leftover'],
+        'description': result.get('description'),
+    }
 
-# Routes
+
 @app.route('/')
 def index():
     return render_template('index.html')
 
-@app.route('/login')
-def login():
-    return render_template('login.html')
 
-@app.route('/register')
-def register():
-    return render_template('registrion.html')
+@app.route('/api/chemicals')
+def api_chemicals():
+    """Return the catalog so the frontend can offer a picker."""
+    return jsonify([{
+        'name': e['name'],
+        'formula': e['formula'],
+        'category': e.get('category'),
+        'phase': e.get('phase'),
+    } for e in all_entries()])
 
-@app.route('/about')
-def about():
-    return render_template('about.html')
 
-@app.route('/contact')
-def contact():
-    return render_template('contact.html')
+@app.route('/api/reaction-types')
+def api_reaction_types():
+    return jsonify(reaction_types())
 
-# Predict API
+
 @app.route('/predict', methods=['POST'])
-def predict():
+def predict_route():
+    data = request.get_json(silent=True) or {}
+    reactants = data.get('reactants') or []
+    temperature = data.get('temperature')
+
+    if temperature is None or temperature == '':
+        return jsonify({'error': 'Provide a temperature in deg C.'}), 400
     try:
-        temp = float(request.form['temperature'])
-        ph = float(request.form['ph'])
-        conc = float(request.form['concentration'])
+        temperature = float(temperature)
+    except (TypeError, ValueError):
+        return jsonify({'error': 'Temperature must be a number.'}), 400
 
-        input_scaled = scaler.transform([[temp, ph, conc]])
-        prediction = model.predict(input_scaled)[0][0]
-        success = 1 if prediction > 0.5 else 0
+    cleaned = []
+    for r in reactants:
+        name = (r.get('name') or '').strip()
+        mass = r.get('mass_g')
+        if not name:
+            return jsonify({'error': 'Every reactant needs a name.'}), 400
+        try:
+            mass = float(mass)
+        except (TypeError, ValueError):
+            return jsonify({'error': f"Mass for '{name}' must be a number (grams)."}), 400
+        if mass <= 0:
+            return jsonify({'error': f"Mass for '{name}' must be positive."}), 400
+        cleaned.append({'name': name, 'mass_g': mass})
 
-        result_text = f"Success Probability: {prediction:.4f} → Prediction: {'Success' if success==1 else 'Failure'}"
+    if not cleaned:
+        return jsonify({'error': 'Provide at least one reactant.'}), 400
 
-        return jsonify({'result': result_text})
+    try:
+        result = predict(cleaned, temperature=temperature)
+    except NoReactionError as e:
+        return jsonify({'matched': False, 'error': str(e)}), 200
+    except EngineError as e:
+        return jsonify({'matched': False, 'error': str(e)}), 200
+    except Exception as e:  # unexpected failure (e.g. network in resolver)
+        app.logger.exception('prediction failed')
+        return jsonify({'matched': False, 'error': f'Internal error: {e}'}), 500
 
-    except Exception as e:
-        print("Error:", e)
-        return jsonify({'result': 'Error in prediction. Please check input values.'})
+    return jsonify(_serialize(result))
 
-# Run the app
+
 if __name__ == '__main__':
     app.run(debug=True)

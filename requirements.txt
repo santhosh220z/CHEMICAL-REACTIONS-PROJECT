@@ -1,6 +1,2 @@
-pandas
-numpy
-tensorflow
-scikit-learn
-matplotlib
-seaborn
+flask
+requests

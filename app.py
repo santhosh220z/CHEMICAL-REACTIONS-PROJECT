@@ -17,14 +17,10 @@ def _serialize(result):
     """Convert engine result to a JSON-safe dict."""
     return {
         'matched': result['matched'],
-        'reaction_name': result['reaction_name'],
-        'reaction_type': result['reaction_type'],
-        'equation': result['equation'],
-        'equation_display': result['equation_display'],
-        'notes': result['notes'],
-        'limiting_reagent': result['limiting_reagent_name'],
-        'products': result['products'],
-        'leftover': result['leftover'],
+        'temperature': result.get('temperature'),
+        'reactions': result['reactions'],
+        'product_summary': result['product_summary'],
+        'unreacted': result['unreacted'],
         'description': result.get('description'),
     }
 

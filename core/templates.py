@@ -240,7 +240,7 @@ TEMPLATES = [
      'notes': 'Magnesium reacts only with hot water/steam, forming Mg(OH)2 and hydrogen.'},
     {'id': 'fe_h2o', 'name': 'Iron + steam',
      'type': 'metal_water', 'reactants': [['Fe', 3], ['H2O', 4]], 'products': [['Fe3O4', 1], ['H2', 4]],
-     'conditions': {'min_temp': 600, 'max_temp': None}, 'optional': [], 'priority': 12,
+     'conditions': {'min_temp': 600, 'max_temp': 1100}, 'optional': [], 'priority': 12,
      'notes': 'Red-hot iron reacts with steam forming black magnetic oxide and hydrogen.'},
 
     # ============================ SINGLE DISPLACEMENT ============================
@@ -338,15 +338,15 @@ TEMPLATES = [
     # ============================ SYNTHESIS ============================
     {'id': 'n2_h2', 'name': 'Nitrogen + hydrogen (Haber process)',
      'type': 'synthesis', 'reactants': [['N2', 1], ['H2', 3]], 'products': [['NH3', 2]],
-     'conditions': {'min_temp': 450, 'max_temp': None}, 'optional': ['Fe'], 'priority': 10,
+     'conditions': {'min_temp': 450, 'max_temp': 600}, 'optional': ['Fe'], 'priority': 10,
      'notes': 'Haber process: ammonia synthesis, industrially run at ~450 C with an iron catalyst.'},
     {'id': 'n2_o2', 'name': 'Nitrogen + oxygen',
      'type': 'synthesis', 'reactants': [['N2', 1], ['O2', 1]], 'products': [['NO', 2]],
-     'conditions': {'min_temp': 2000, 'max_temp': None}, 'optional': [], 'priority': 10,
+     'conditions': {'min_temp': 2000, 'max_temp': 3500}, 'optional': [], 'priority': 10,
      'notes': 'At lightning/furnace temperatures nitrogen and oxygen combine to nitric oxide.'},
     {'id': 'so2_o2', 'name': 'Sulfur dioxide + oxygen',
      'type': 'synthesis', 'reactants': [['SO2', 2], ['O2', 1]], 'products': [['SO3', 2]],
-     'conditions': {'min_temp': 400, 'max_temp': None}, 'optional': ['Pt'], 'priority': 10,
+     'conditions': {'min_temp': 400, 'max_temp': 600}, 'optional': ['Pt'], 'priority': 10,
      'notes': 'Contact-process step: SO2 is oxidized to SO3 over a platinum/vanadium catalyst.'},
     {'id': 'h2_cl2', 'name': 'Hydrogen + chlorine',
      'type': 'synthesis', 'reactants': [['H2', 1], ['Cl2', 1]], 'products': [['HCl', 2]],
@@ -358,7 +358,7 @@ TEMPLATES = [
      'notes': 'Direct combination forming hydrogen bromide.'},
     {'id': 'na_cl2', 'name': 'Sodium + chlorine',
      'type': 'synthesis', 'reactants': [['Na', 2], ['Cl2', 1]], 'products': [['NaCl', 2]],
-     'conditions': {'min_temp': 200, 'max_temp': None}, 'optional': [], 'priority': 10,
+     'conditions': {'min_temp': 200, 'max_temp': 1500}, 'optional': [], 'priority': 10,
      'notes': 'Sodium burns in chlorine gas forming table salt.'},
     {'id': 'cao_h2o', 'name': 'Calcium oxide + water',
      'type': 'synthesis', 'reactants': [['CaO', 1], ['H2O', 1]], 'products': [['Ca(OH)2', 1]],
@@ -474,7 +474,7 @@ TEMPLATES = [
      'type': 'precipitation', 'reactants': [['AgNO3', 1], ['KCl', 1]], 'products': [['AgCl', 1], ['KNO3', 1]],
      'conditions': {'min_temp': None, 'max_temp': None}, 'optional': [], 'priority': 10,
      'notes': 'White silver chloride precipitate forms.'},
-    {'id': 'bac l2_na2so4', 'name': 'Barium chloride + sodium sulfate',
+    {'id': 'bacl2_na2so4', 'name': 'Barium chloride + sodium sulfate',
      'type': 'precipitation', 'reactants': [['BaCl2', 1], ['Na2SO4', 1]], 'products': [['BaSO4', 1], ['NaCl', 2]],
      'conditions': {'min_temp': None, 'max_temp': None}, 'optional': [], 'priority': 10,
      'notes': 'Dense white barium sulfate precipitate — the classic sulfate test.'},
@@ -514,6 +514,39 @@ def get_template(template_id):
         if t['id'] == template_id:
             return t
     return None
+
+
+# Default temperature ceilings (deg C) per reaction class. Any template can
+# override with an explicit max_temp in its own conditions.
+DEFAULT_MAX_TEMP = {
+    'neutralization': 200,
+    'acid_carbonate': 200,
+    'acid_metal': 200,
+    'acid_oxide': 200,
+    'precipitation': 200,
+    'single_displacement': 200,
+    'metal_water': 200,
+    'metal_oxygen': 1600,
+    'combustion': 2000,
+    'decomposition': 1200,
+    'synthesis': 2000,
+}
+
+
+def _with_default_temperature_windows():
+    """Fill max_temp into any template that does not define one explicitly."""
+    out = []
+    for t in TEMPLATES:
+        cond = dict(t.get('conditions') or {})
+        if cond.get('max_temp') is None and t.get('type') in DEFAULT_MAX_TEMP:
+            cond['max_temp'] = DEFAULT_MAX_TEMP[t['type']]
+        nt = dict(t)
+        nt['conditions'] = cond
+        out.append(nt)
+    return out
+
+
+TEMPLATES = _with_default_temperature_windows()
 
 
 def templates_for_type(reaction_type):

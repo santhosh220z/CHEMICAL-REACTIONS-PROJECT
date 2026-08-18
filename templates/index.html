@@ -375,6 +375,60 @@
 
         .notes { color: var(--muted); font-size: 0.86rem; margin-bottom: 0.9rem; }
 
+        .reaction-block {
+            border-top: 1px dashed var(--border);
+            margin-top: 1rem;
+            padding-top: 1rem;
+        }
+
+        .reaction-block:first-child {
+            border-top: none;
+            margin-top: 0;
+            padding-top: 0;
+        }
+
+        .reaction-index {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 22px;
+            height: 22px;
+            padding: 0 6px;
+            border-radius: 999px;
+            background: var(--accent-soft);
+            color: var(--accent);
+            font-size: 0.75rem;
+            font-weight: 700;
+            margin-right: 0.4rem;
+        }
+
+        .not-involved {
+            color: var(--muted);
+            font-size: 0.84rem;
+            margin-top: 0.6rem;
+            padding: 0.5rem 0.7rem;
+            background: var(--card-2);
+            border: 1px dashed var(--border);
+            border-radius: 10px;
+        }
+
+        .unreacted {
+            margin-top: 0.9rem;
+            padding: 0.5rem 0.7rem;
+            border: 1px solid var(--error-border);
+            background: var(--error-bg);
+            color: var(--error-text);
+            border-radius: 10px;
+            font-size: 0.85rem;
+        }
+
+        .summary-label {
+            margin: 1.1rem 0 0.4rem;
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--text);
+        }
+
         .limiting {
             display: flex;
             align-items: center;
@@ -590,32 +644,69 @@
             showError(data.error || 'No reaction found.');
             return;
         }
-        const prodRows = data.products.map(function (p) {
-            return `<tr><td>${escapeHtml(p.name)}</td><td>${p.formula}</td><td>${p.moles}</td><td>${p.grams}</td></tr>`;
-        }).join('');
-        let leftRows = '';
-        if (data.leftover && data.leftover.length) {
-            leftRows = data.leftover.map(function (p) {
+
+        const reactions = data.reactions || [];
+        const blocks = reactions.map(function (r, i) {
+            const prodRows = (r.products || []).map(function (p) {
                 return `<tr><td>${escapeHtml(p.name)}</td><td>${p.formula}</td><td>${p.moles}</td><td>${p.grams}</td></tr>`;
             }).join('');
+            let leftRows = '';
+            if (r.leftover && r.leftover.length) {
+                leftRows = r.leftover.map(function (p) {
+                    return `<tr><td>${escapeHtml(p.name)}</td><td>${p.formula}</td><td>${p.moles}</td><td>${p.grams}</td></tr>`;
+                }).join('');
+            }
+            const notInvolved = (r.not_involved || []).map(function (n) {
+                return `${escapeHtml(n.name)} (${n.formula}, ${n.grams} g)`;
+            }).join(', ');
+            return `
+                <div class="reaction-block">
+                    <div>
+                        <span class="reaction-index">${i + 1}</span>
+                        <span class="badge">${escapeHtml(r.reaction_type || 'reaction')}</span>
+                    </div>
+                    <div class="result-title">${escapeHtml(r.reaction_name || 'Reaction')}</div>
+                    <div class="equation">${r.equation_display || escapeHtml(r.equation)}</div>
+                    ${r.notes ? `<div class="notes">${escapeHtml(r.notes)}</div>` : ''}
+                    ${r.limiting_reagent_name ? `<div class="limiting"><strong>Limiting reagent:</strong> ${escapeHtml(r.limiting_reagent_name)}</div>` : ''}
+                    <table>
+                        <thead><tr><th>Product</th><th>Formula</th><th>Moles</th><th>Mass (g)</th></tr></thead>
+                        <tbody>${prodRows}</tbody>
+                    </table>
+                    ${leftRows ? `
+                    <h4>Left over</h4>
+                    <table>
+                        <thead><tr><th>Reactant</th><th>Formula</th><th>Moles</th><th>Mass (g)</th></tr></thead>
+                        <tbody>${leftRows}</tbody>
+                    </table>` : ''}
+                    ${notInvolved ? `<div class="not-involved"><strong>Not involved:</strong> ${notInvolved}</div>` : ''}
+                </div>`;
+        }).join('');
+
+        const summary = data.product_summary || [];
+        let summaryBlock = '';
+        if (summary.length > 1) {
+            const sumRows = summary.map(function (p) {
+                const madeBy = (p.produced_by || []).map(escapeHtml).join('; ');
+                return `<tr><td>${escapeHtml(p.name)}</td><td>${p.formula}</td><td>${madeBy}</td><td>${p.grams}</td></tr>`;
+            }).join('');
+            summaryBlock = `
+                <div class="summary-label">Products &amp; processes</div>
+                <table>
+                    <thead><tr><th>Product</th><th>Formula</th><th>Produced by</th><th>Mass (g)</th></tr></thead>
+                    <tbody>${sumRows}</tbody>
+                </table>`;
         }
+
+        const unreacted = (data.unreacted || []).map(function (n) {
+            return `${escapeHtml(n.name)} (${n.formula}, ${n.grams} g)`;
+        }).join(', ');
+
         resultBox.innerHTML = `
             <div class="success-box">
-                <span class="badge">${escapeHtml(data.reaction_type || 'reaction')}</span>
-                <div class="result-title">${escapeHtml(data.reaction_name || 'Reaction')}</div>
-                <div class="equation">${data.equation_display || escapeHtml(data.equation)}</div>
-                ${data.notes ? `<div class="notes">${escapeHtml(data.notes)}</div>` : ''}
-                ${data.limiting_reagent ? `<div class="limiting"><strong>Limiting reagent:</strong> ${escapeHtml(data.limiting_reagent)}</div>` : ''}
-                <table>
-                    <thead><tr><th>Product</th><th>Formula</th><th>Moles</th><th>Mass (g)</th></tr></thead>
-                    <tbody>${prodRows}</tbody>
-                </table>
-                ${leftRows ? `
-                <h4>Left over</h4>
-                <table>
-                    <thead><tr><th>Reactant</th><th>Formula</th><th>Moles</th><th>Mass (g)</th></tr></thead>
-                    <tbody>${leftRows}</tbody>
-                </table>` : ''}
+                ${blocks}
+                ${summaryBlock}
+                ${unreacted ? `<div class="unreacted"><strong>Unreacted:</strong> ${unreacted}</div>` : ''}
                 ${data.description ? `<div class="notes" style="margin-top:0.8rem">${escapeHtml(data.description)}</div>` : ''}
             </div>`;
     }

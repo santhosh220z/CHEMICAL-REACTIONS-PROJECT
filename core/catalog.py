@@ -58,6 +58,8 @@ CATALOG = [
     {'formula': 'CuCl2', 'name': 'Copper(II) Chloride', 'aliases': ['copper(ii) chloride', 'cupric chloride'], 'phase': 's', 'category': 'salt'},
     {'formula': 'ZnCl2', 'name': 'Zinc Chloride', 'aliases': ['zinc chloride'], 'phase': 's', 'category': 'salt'},
     {'formula': 'NH4Cl', 'name': 'Ammonium Chloride', 'aliases': ['ammonium chloride', 'sal ammoniac'], 'phase': 's', 'category': 'salt'},
+    {'formula': 'KClO3', 'name': 'Potassium Chlorate', 'aliases': ['potassium chlorate', 'chlorate of potash'], 'phase': 's', 'category': 'salt'},
+    {'formula': 'BaCl2', 'name': 'Barium Chloride', 'aliases': ['barium chloride'], 'phase': 's', 'category': 'salt'},
     {'formula': 'Na2SO4', 'name': 'Sodium Sulfate', 'aliases': ['sodium sulfate', 'sodium sulphate'], 'phase': 's', 'category': 'salt'},
     {'formula': 'MgSO4', 'name': 'Magnesium Sulfate', 'aliases': ['magnesium sulfate', 'magnesium sulphate', 'epsom salt'], 'phase': 's', 'category': 'salt'},
     {'formula': 'CaSO4', 'name': 'Calcium Sulfate', 'aliases': ['calcium sulfate', 'calcium sulphate', 'gypsum'], 'phase': 's', 'category': 'salt'},

@@ -103,11 +103,5 @@ This project demonstrates:
 
 ![image](https://github.com/user-attachments/assets/3bfd2990-d8a4-429e-a928-bca80c1c7ecd)
 
-
-
-## 🎓 Team
-
-Built by **Team 2**
-2025 Chemical Reaction Success Prediction — Hackathon Project
-
+by Santhosh
 ---

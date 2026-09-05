@@ -71,7 +71,7 @@ README.md
 
 | Parameter        | Range           |
 | ---------------- | --------------- |
-| Temperature (°C) | 0°C – 300°C     |
+| Temperature (°C) | 0°C – 2000°C     |
 | pH               | 0 – 14          |
 | Concentration    | 0.01 – 10 mol/L |
 

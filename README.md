@@ -7,9 +7,9 @@
 
 This project is a simple, AI-powered web application that predicts the probability of a chemical reaction being successful based on key reaction parameters:
 
-✅ Temperature
-✅ pH level
-✅ Reactant concentration
+1. Temperature
+2. pH level
+3. Reactant concentration
 
 The app leverages a trained Artificial Neural Network (ANN) built with TensorFlow & Keras, wrapped in a Flask backend, and presented through a modern, responsive frontend.
 
